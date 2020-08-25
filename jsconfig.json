@@ -1,0 +1,19 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "sourceMap": false,
+    "checkJs":true,
+    "moduleResolution": "node",
+    "module": "commonJS",
+    "target": "es2018", 
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true, 
+    "baseUrl": "."
+  },
+  "paths": {
+    "*": ["node_modules/*"]
+  },
+  "include": ["libs"],
+  "exclude": ["node_modules"]
+}
