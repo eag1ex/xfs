@@ -10,9 +10,10 @@ module.exports = ({ dir, ext }) => {
     if (!ext) ext = `.json`
     if (ext.indexOf('.') !== 0) throw ('provided ext(extention) needs a prefix')
     ext = ext.toLowerCase()
-
+  
     const path = require('path')
     const fs = require('fs')
+
     const o = {}
 
     /** 
