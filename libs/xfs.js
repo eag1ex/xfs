@@ -46,11 +46,13 @@ module.exports = function(/*{ dir, ext },cb*/) {
      * @readFile
      * - read existing file from `dir`, must be set at `xfs({dir})`
      * @param fileName ./fileName without extention, it is proposed as `.json`
+     * @param otherDir (optional) provide custom dir location, othere then our config.dir
      * @returns returns any parsed data
     */
-    o.readFile = (fileName) => {
+    o.readFile = (fileName, otherDir) => {
         if (!fileName) return null
-        let fname = path.join(dir, `./${fileName}${ext}`)
+        let dr = otherDir ? otherDir :dir
+        let fname = path.join(dr, `./${fileName}${ext}`)
         try {
             let str = fs.readFileSync(fname).toString()
             let d
@@ -68,17 +70,19 @@ module.exports = function(/*{ dir, ext },cb*/) {
      * - only provide `fileName`, `dir ` must be set at `xfs({dir})`
      * @param fileName ./fileName without extention, it is proposed as `.json`
      * @param data:any, raw data not JSON/string
+     * @param otherDir (optional) provide custom dir location, othere then our config.dir
+     * @returns true/false
     */
-    o.writeFile = (fileName, data) => {
+    o.writeFile = (fileName, data, otherDir) => {
         if (data === undefined) return false
         if (!fileName) return null
-        let fname = path.join(dir, `./${fileName}${ext}`)
+        let dr = otherDir ? otherDir :dir
+        let fname = path.join(dr, `./${fileName}${ext}`)
 
         /// make dir if doesnt exist
-        let dirName = path.join(dir, './')
+        let dirName = path.join(dr, './')
         if (!fs.existsSync(dirName)) fs.mkdirSync(dirName)
 
-        let d
         try {
             fs.writeFileSync(fname, JSON.stringify(data))
             console.log(`[writeFile]`, `file:${fileName} written`)
@@ -95,7 +99,7 @@ module.exports = function(/*{ dir, ext },cb*/) {
      * - if file exists and doest have data, will also count, and be included in output
      * - only loads json files
      * @param filePreFix load files matching prefix
-     * @param otherDir can provide custom files directory, or will use our config/dir+path
+     * @param otherDir (optional) provide custom dir location, othere then our config.dir
      * @returns [...] array of files
     */
     o.loadFileBatch = (filePreFix = '', otherDir='') => {
