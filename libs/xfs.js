@@ -81,8 +81,13 @@ module.exports = function(/*{ dir, ext },cb*/) {
 
         /// make dir if doesnt exist
         let dirName = path.join(dr, './')
-        if (!fs.existsSync(dirName)) fs.mkdirSync(dirName)
-
+        try{
+            if (!fs.existsSync(dirName)) fs.mkdirSync(dirName)
+        }catch(err){
+            console.log(`[writeFile][error]`,err.toString())
+            return false
+        }
+        
         try {
             fs.writeFileSync(fname, JSON.stringify(data))
             console.log(`[writeFile]`, `file:${fileName} written`)
