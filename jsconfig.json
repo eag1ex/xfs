@@ -2,7 +2,7 @@
   "compileOnSave": true,
   "compilerOptions": {
     "sourceMap": false,
-    "checkJs":true,
+    "checkJs":false,
     "moduleResolution": "node",
     "module": "commonJS",
     "target": "es2018", 
