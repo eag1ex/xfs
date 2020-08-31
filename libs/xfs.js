@@ -88,5 +88,47 @@ module.exports = function(/*{ dir, ext },cb*/) {
             return false
         }
     }
+
+    /** 
+     * @loadFileBatch
+     * - load files from a batch in directory with given prefix
+     * - if file exists and doest have data, will also count, and be included in output
+     * - only loads json files
+     * @param filePreFix load files matching prefix
+     * @param otherDir can provide custom files directory, or will use our config/dir+path
+     * @returns [...] array of files
+    */
+    o.loadFileBatch = (filePreFix = '', otherDir='') => {
+
+        try {
+            let dr = otherDir ? otherDir : dir
+            
+            // must provide dir not a full file path
+            if(dr.indexOf('.json')!==-1 || dr.indexOf('.JSON')!==-1){
+                return []
+            }
+            let list = fs.readdirSync(dr).map(file => {
+                if(!filePreFix && (file.indexOf('.json')!==-1 || file.indexOf('.JSON')!==-1) ){
+                    return file
+                }
+                if (file.indexOf(filePreFix) === 0 && (file.indexOf('.json')!==-1 || file.indexOf('.JSON')!==-1) ) {
+                    return file
+                }
+            }).filter(n => !!n)
+                .map(file => {
+                    try {
+                        return JSON.parse(fs.readFileSync(path.join(dr, file)))
+                    } catch (err) {
+                        console.log('[loadFileBatch][error]', err.toString())
+                    }
+                }).filter(n => !!n)
+            return list
+
+        } catch (err) {
+            console.log('[loadFileBatch][error]', err.toString())
+        }
+        return []
+    }
+
     return o
 }

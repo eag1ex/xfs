@@ -10,11 +10,6 @@
 /$ npm i git+https://bitbucket.org:eag1ex/xfs.git
 ```
 
-
-#### Methods
-- `readFile(fileName):data`: returns any parsed data (`only for .json extention`)
-- `writeFile(fileName,data):boolean`: returns true/false , will automaticly create base ./dir if doesnt exist
-
 #### config options
 - `xfs( { dir: config.dir, ext} , cb()=>({dir,ext,path}) )`
     * `cb()=>({dir,path,ext}) ):Object` we can use callback, instead of providing `{dir,ext}`, this way we do not have to use `require('path')` to join then, or use of config.dir with full path, __thanks arrow/fn callback__ `{dir:_dirname}` > it gives us location relative to app. `xfs(cb,x)` or `xfs(x,cb)` args position dont matter, so no worry about placement. If you also declare {dir,ext}, callback takes priority, so those will be overriten.
@@ -24,6 +19,14 @@
 
     * `dir:string` can supply absolute path, relative to application root. __use only without cb__
     *  `ext:String` can provide file extentions: `.json, .txt, .md` in `config.ext`, but will only parse data in `.json` extention, __use only without cb__
+
+
+#### Methods
+- `readFile(fileName):data`: returns any parsed data (`only for .json extention`)
+- `writeFile(fileName,data):boolean`: returns true/false , will automaticly create base ./dir if doesnt exist
+- `loadFileBatch(filePrefix,otherDir):[..]` : loads any .json files from our config dir. Returns parsed data of all available json files.
+    * `filePrefix` : match all files with given prefix in the dir
+    * `otherDir` : provide optional dir other then our/current 
 
 
 #### Examples:

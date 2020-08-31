@@ -21,3 +21,10 @@ function ExampleTwo() {
 }
 ExampleTwo()
 
+
+function ExampleThree() {
+
+    const {loadFileBatch } = xfs( () => ({ dir: __dirname, path: './logs/cache' }) );
+    loadFileBatch('example'/**,otherDir */) // returns [,,,] parsed data of all available json files
+    
+}
