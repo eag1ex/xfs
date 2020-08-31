@@ -60,7 +60,7 @@ module.exports = function(/*{ dir, ext },cb*/) {
             else d = str
             return d
         } catch (err) {
-            console.log(err)
+            console.log(`[readFile][error]`,err.toString())
         }
         return null
     }
@@ -93,7 +93,7 @@ module.exports = function(/*{ dir, ext },cb*/) {
             console.log(`[writeFile]`, `file:${fileName} written`)
             return true
         } catch (err) {
-            console.log(err)
+            console.log(`[writeFile][error]`,err.toString())
             return false
         }
     }
