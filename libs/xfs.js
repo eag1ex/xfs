@@ -9,17 +9,15 @@ module.exports = function(/*{ dir, ext },cb*/) {
     const path = require('path')
     const fs = require('fs')
     // NOTE dynamicly recognize arguments position    
-    let { dir, ext, cb } = Object.entries(arguments).reduce((n, [key, val]) => {
+    let { dir, ext, cb,pth } = Object.entries(arguments).reduce((n, [key, val]) => {
+
         let keys = (typeof val === 'object' && val) ? Object.keys(val) : []   
         let fn = typeof val === 'function' ? val : null
 
         if (keys.length) {
-            if (keys.indexOf('dir') !== -1) {
-                n['dir'] = val['dir']
-            }
-            if (keys.indexOf('ext') !== -1) {
-                n['ext'] = val['ext']
-            }
+            if (keys.indexOf('dir') !== -1) n['dir'] = val['dir']
+            if (keys.indexOf('ext') !== -1) n['ext'] = val['ext']
+            if (keys.indexOf('path') !== -1) n['path'] = val['path']
         }
 
         if (fn) n['cb'] = fn
@@ -30,15 +28,17 @@ module.exports = function(/*{ dir, ext },cb*/) {
     if (cb) {
         const _opts = cb() || {}
         if (_opts.dir) dir = _opts.dir // NOTE call back was provided where the xfs was called with its relative dir, so we can use that instead of config.dir
-        if (_opts.path) dir = path.join(dir, _opts.path)
+        if (_opts.path && dir) dir = path.join(dir, _opts.path || pth)
         if (_opts.ext) ext = _opts.ext
     }
+
+    // NOTE if path was provided in arguments: {path} and no cb was set, use that instead!
+    if(!cb && pth && dir) dir = path.join(dir, pth)
 
     if (!dir) throw ('{dir} is required')
     if (!ext) ext = `.json`
     if (ext.indexOf('.') !== 0) throw ('provided ext(extention) needs a prefix')
     ext = ext.toLowerCase()
-  
 
     const o = {}
 

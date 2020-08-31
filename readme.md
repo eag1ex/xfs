@@ -11,8 +11,8 @@
 ```
 
 #### config options
-- `xfs( { dir: config.dir, ext} , cb()=>({dir,ext,path}) )`
-    * `cb()=>({dir,path,ext}) ):Object` we can use callback, instead of providing `{dir,ext}`, this way we do not have to use `require('path')` to join then, or use of config.dir with full path, __thanks arrow/fn callback__ `{dir:_dirname}` > it gives us location relative to app. `xfs(cb,x)` or `xfs(x,cb)` args position dont matter, so no worry about placement. If you also declare {dir,ext}, callback takes priority, so those will be overriten.
+- `xfs( { dir: config.dir, ext, path} , cb()=>({dir,ext,path}) )`
+    * `cb()=>({dir,path,ext}) ):Object` we can use callback, instead of providing `{dir,ext,(optional {path} )}`, this way we do not have to use `require('path')` to join then, or use of config.dir with full path, __thanks arrow/fn callback__ `{dir:_dirname}` > it gives us location relative to app. `xfs(cb,x)` or `xfs(x,cb)` args position dont matter, so no worry about placement. If you also declare {dir,ext}, callback takes priority, so those will be overriten.
         - `cb()=>({dir})`: include `__dirname`
         - `cb()=>({path})`: include the path name, examples: `./a`, `./a/b`, then both are joined by dir, when path isnt provided anywhere, `__dirname` location becomes your path.
         - `cb()=>({ext})`: file extention type.
