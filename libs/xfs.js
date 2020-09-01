@@ -139,5 +139,18 @@ module.exports = function(/*{ dir, ext },cb*/) {
         return []
     }
 
+
+
+    /** 
+     * @fullPath
+     * - returns fill path to any file
+     * @param `{dirLocation,fileName}`, provide new dirLocation, and fileName and return full path. dirLocation/path revert to original xfs config when not set 
+    */
+    o.fullPath = ({ dirLocation, fileName }) => {
+        
+        let buildPath = path.join(`${dirLocation || dir}`, fileName || pth || './')
+        return buildPath
+    }
+
     return o
 }

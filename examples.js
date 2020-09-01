@@ -19,12 +19,13 @@ function ExampleTwo() {
     console.log(writeFile('exampleOne', { value: 100, message: 'hello world' })) // true if successful 
     console.log(readFile('exampleOne')) // { value: 100, message: 'hello world' }
 }
-ExampleTwo()
+//ExampleTwo()
 
 
 function ExampleThree() {
 
-    const {loadFileBatch } = xfs( () => ({ dir: __dirname, path: './logs/cache' }) );
+    const {loadFileBatch,fullPath } = xfs( () => ({ dir: __dirname, path: './logs/cache' }) );
     loadFileBatch('example'/**,otherDir */) // returns [,,,] parsed data of all available json files
-    
 }
+
+ExampleThree()
