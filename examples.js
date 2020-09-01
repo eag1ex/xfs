@@ -26,6 +26,7 @@ function ExampleThree() {
 
     const {loadFileBatch,fullPath } = xfs( () => ({ dir: __dirname, path: './logs/cache' }) );
     loadFileBatch('example'/**,otherDir */) // returns [,,,] parsed data of all available json files
+    console.log(fullPath({'fileName':'./test'}))
 }
 
 ExampleThree()
