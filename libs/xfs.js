@@ -5,7 +5,7 @@
  * - more examples in `./examples.js` 
  * - default extention is set to `.json`, can use any other for example:[.txt,.md], but only data can be parsed with `.json` extention, other formats will return raw data.
 */
-module.exports = function(/*{ dir, ext },cb*/) {
+module.exports = function(/*{ dir, ext,path },cb*/) {
     const path = require('path')
     const fs = require('fs')
     // NOTE dynamicly recognize arguments position    
@@ -47,16 +47,22 @@ module.exports = function(/*{ dir, ext },cb*/) {
      * - read existing file from `dir`, must be set at `xfs({dir})`
      * @param fileName ./fileName without extention, it is proposed as `.json`
      * @param otherDir (optional) provide custom dir location, othere then our config.dir
+     * @param _ext provide/optional custom extention name, example `.md`
      * @returns returns any parsed data
     */
-    o.readFile = (fileName, otherDir) => {
+    o.readFile = (fileName, otherDir,_ext) => {
         if (!fileName) return null
+        // must provide extention with prefix
+        if(_ext && (_ext||"").indexOf('.')===-1 ) {
+            return null
+        }
         let dr = otherDir ? otherDir :dir
-        let fname = path.join(dr, `./${fileName}${ext}`)
+        _ext = _ext || ext
+        let fname = path.join(dr, `./${fileName}${_ext}`)
         try {
             let str = fs.readFileSync(fname).toString()
             let d
-            if (ext === '.json') d = JSON.parse(str)
+            if (_ext === '.json') d = JSON.parse(str)
             else d = str
             return d
         } catch (err) {

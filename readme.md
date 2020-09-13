@@ -22,7 +22,7 @@
 
 
 #### Methods
-- `readFile(fileName,otherDir):data`: returns any parsed data (`only for .json extention`)
+- `readFile(fileName,otherDir,_ext):data`: returns any parsed data (`only for .json extention`)
 - `writeFile(fileName,data,otherDir):boolean`: returns true/false , will automaticly create base ./dir if doesnt 
 exist
 - `fullPath({ dirLocation, fileName }):string`: returns fullPath 
