@@ -23,7 +23,7 @@
 
 #### Methods
 - `readFile(fileName,otherDir,_ext):data`: returns any parsed data (`only for .json extention`)
-- `writeFile(fileName,data,otherDir):boolean`: returns true/false , will automaticly create base ./dir if doesnt 
+- `writeFile(fileName,data,otherDir, _ext):boolean`: returns true/false , will automaticly create base ./dir if doesnt 
 exist
 - `fullPath({ dirLocation, fileName }):string`: returns fullPath 
 - `loadFileBatch(filePrefix,otherDir):[..]` : loads any .json files from our config dir. Returns parsed data of all available json files.

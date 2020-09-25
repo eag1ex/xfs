@@ -77,13 +77,15 @@ module.exports = function(/*{ dir, ext,path },cb*/) {
      * @param fileName ./fileName without extention, it is proposed as `.json`
      * @param data:any, raw data not JSON/string
      * @param otherDir (optional) provide custom dir location, othere then our config.dir
+     * @param _ext (optional) file extention name, example : .json
      * @returns true/false
     */
-    o.writeFile = (fileName, data, otherDir) => {
+    o.writeFile = (fileName, data, otherDir, _ext) => {
         if (data === undefined) return false
         if (!fileName) return null
         let dr = otherDir ? otherDir :dir
-        let fname = path.join(dr, `./${fileName}${ext}`)
+        _ext = _ext || ext
+        let fname = path.join(dr, `./${fileName}${_ext}`)
 
         /// make dir if doesnt exist
         let dirName = path.join(dr, './')
