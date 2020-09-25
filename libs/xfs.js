@@ -83,25 +83,29 @@ module.exports = function(/*{ dir, ext,path },cb*/) {
     o.writeFile = (fileName, data, otherDir, _ext) => {
         if (data === undefined) return false
         if (!fileName) return null
-        let dr = otherDir ? otherDir :dir
+        let dr = otherDir ? otherDir : dir
         _ext = _ext || ext
         let fname = path.join(dr, `./${fileName}${_ext}`)
 
         /// make dir if doesnt exist
         let dirName = path.join(dr, './')
-        try{
+        try {
             if (!fs.existsSync(dirName)) fs.mkdirSync(dirName)
-        }catch(err){
-            console.log(`[writeFile][error]`,err.toString())
+        } catch (err) {
+            console.log(`[writeFile][error]`, err.toString())
             return false
         }
-        
+
         try {
-            fs.writeFileSync(fname, JSON.stringify(data))
+            
+            if (_ext === '.json') {
+                fs.writeFileSync(fname, JSON.stringify(data))
+            } else fs.writeFileSync(fname, data)
+
             console.log(`[writeFile]`, `file:${fileName} written`)
             return true
         } catch (err) {
-            console.log(`[writeFile][error]`,err.toString())
+            console.log(`[writeFile][error]`, err.toString())
             return false
         }
     }
