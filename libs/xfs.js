@@ -110,6 +110,49 @@ module.exports = function(/*{ dir, ext,path },cb*/) {
         }
     }
 
+
+      /** 
+     * @appendFile
+     * - only provide `fileName`, `dir ` must be set at `xfs({dir})`
+     * @param fileName ./fileName without extention, default is `.json` but wont work with appendFile in this case! 
+     * @param data:any, raw data not JSON/string
+     * @param otherDir (optional) provide custom dir location, othere then our config.dir
+     * @param _ext (optional) file extention name, example : .json
+     * @returns true/false
+    */
+    o.appendFile = (fileName, data, otherDir, _ext) => {
+        if (data === undefined) return false
+        if (!fileName) return null
+        let dr = otherDir ? otherDir : dir
+        _ext = _ext || ext
+        let fname = path.join(dr, `./${fileName}${_ext}`)
+
+        /// make dir if doesnt exist
+        let dirName = path.join(dr, './')
+        try {
+            if (!fs.existsSync(dirName)) fs.mkdirSync(dirName)
+        } catch (err) {
+            console.log(`[appendFile][error]`, err.toString())
+            return false
+        }
+
+        try {
+
+            if (_ext === '.json') {
+                console.log('cannot append to json file right!')
+                //fs.appendFileSync(fname, JSON.stringify(data))
+                return false
+            } else fs.appendFileSync(fname, data)
+
+            console.log(`[appendFile]`, `file:${fileName} written`)
+            return true
+        } catch (err) {
+            console.log(`[appendFile][error]`, err.toString())
+            return false
+        }
+    }
+
+
     /** 
      * @loadFileBatch
      * - load files from a batch in directory with given prefix
