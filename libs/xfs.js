@@ -5,11 +5,11 @@
  * - more examples in `./examples.js` 
  * - default extention is set to `.json`, can use any other for example:[.txt,.md], but only data can be parsed with `.json` extention, other formats will return raw data.
 */
-module.exports = function(/*{ dir, ext,path },cb*/) {
+module.exports = function(/*{ dir, ext,path, silent },cb*/) {
     const path = require('path')
     const fs = require('fs')
     // NOTE dynamicly recognize arguments position    
-    let { dir, ext, cb,pth } = Object.entries(arguments).reduce((n, [key, val]) => {
+    let { dir, ext, cb,pth,silent } = Object.entries(arguments).reduce((n, [key, val]) => {
 
         let keys = (typeof val === 'object' && val) ? Object.keys(val) : []   
         let fn = typeof val === 'function' ? val : null
@@ -18,6 +18,7 @@ module.exports = function(/*{ dir, ext,path },cb*/) {
             if (keys.indexOf('dir') !== -1) n['dir'] = val['dir']
             if (keys.indexOf('ext') !== -1) n['ext'] = val['ext']
             if (keys.indexOf('path') !== -1) n['path'] = val['path']
+            if (keys.indexOf('silent') !== -1) n['silent'] = val['silent']
         }
 
         if (fn) n['cb'] = fn
@@ -30,6 +31,7 @@ module.exports = function(/*{ dir, ext,path },cb*/) {
         if (_opts.dir) dir = _opts.dir // NOTE call back was provided where the xfs was called with its relative dir, so we can use that instead of config.dir
         if (_opts.path && dir) dir = path.join(dir, _opts.path || pth)
         if (_opts.ext) ext = _opts.ext
+        if (_opts.silent) silent = _opts.silent
     }
 
     // NOTE if path was provided in arguments: {path} and no cb was set, use that instead!
@@ -66,7 +68,7 @@ module.exports = function(/*{ dir, ext,path },cb*/) {
             else d = str
             return d
         } catch (err) {
-            console.log(`[readFile][error]`,err.toString())
+            if(!silent) console.log(`[readFile][error]`,err.toString())
         }
         return null
     }
@@ -92,7 +94,7 @@ module.exports = function(/*{ dir, ext,path },cb*/) {
         try {
             if (!fs.existsSync(dirName)) fs.mkdirSync(dirName)
         } catch (err) {
-            console.log(`[writeFile][error]`, err.toString())
+            if(!silent)  console.log(`[writeFile][error]`, err.toString())
             return false
         }
 
@@ -102,10 +104,10 @@ module.exports = function(/*{ dir, ext,path },cb*/) {
                 fs.writeFileSync(fname, JSON.stringify(data))
             } else fs.writeFileSync(fname, data)
 
-            console.log(`[writeFile]`, `file:${fileName} written`)
+            if(!silent) console.log(`[writeFile]`, `file:${fileName} written`)
             return true
         } catch (err) {
-            console.log(`[writeFile][error]`, err.toString())
+            if(!silent) console.log(`[writeFile][error]`, err.toString())
             return false
         }
     }
@@ -132,22 +134,22 @@ module.exports = function(/*{ dir, ext,path },cb*/) {
         try {
             if (!fs.existsSync(dirName)) fs.mkdirSync(dirName)
         } catch (err) {
-            console.log(`[appendFile][error]`, err.toString())
+            if(!silent)  console.log(`[appendFile][error]`, err.toString())
             return false
         }
 
         try {
 
             if (_ext === '.json') {
-                console.log('cannot append to json file right!')
+                if(!silent) console.log('cannot append to json file right!')
                 //fs.appendFileSync(fname, JSON.stringify(data))
                 return false
             } else fs.appendFileSync(fname, data)
 
-            console.log(`[appendFile]`, `file:${fileName} written`)
+            if(!silent)  console.log(`[appendFile]`, `file:${fileName} written`)
             return true
         } catch (err) {
-            console.log(`[appendFile][error]`, err.toString())
+            if(!silent) console.log(`[appendFile][error]`, err.toString())
             return false
         }
     }
@@ -183,13 +185,13 @@ module.exports = function(/*{ dir, ext,path },cb*/) {
                     try {
                         return JSON.parse(fs.readFileSync(path.join(dr, file)))
                     } catch (err) {
-                        console.log('[loadFileBatch][error]', err.toString())
+                        if(!silent) console.log('[loadFileBatch][error]', err.toString())
                     }
                 }).filter(n => !!n)
             return list
 
         } catch (err) {
-            console.log('[loadFileBatch][error]', err.toString())
+            if(!silent) console.log('[loadFileBatch][error]', err.toString())
         }
         return []
     }
