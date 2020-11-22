@@ -5,9 +5,10 @@
  * - more examples in `./examples.js` 
  * - default extention is set to `.json`, can use any other for example:[.txt,.md], but only data can be parsed with `.json` extention, other formats will return raw data.
 */
-module.exports = function(/*{ dir, ext,path, silent },cb*/) {
+module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
     const path = require('path')
     const fs = require('fs')
+
     // NOTE dynamicly recognize arguments position    
     let { dir, ext, cb,pth,silent } = Object.entries(arguments).reduce((n, [key, val]) => {
 
@@ -50,14 +51,16 @@ module.exports = function(/*{ dir, ext,path, silent },cb*/) {
      * @param fileName ./fileName without extention, it is proposed as `.json`
      * @param otherDir (optional) provide custom dir location, othere then our config.dir
      * @param _ext provide/optional custom extention name, example `.md`
+     * @param silent:boolean disable any logging
      * @returns returns any parsed data
     */
-    o.readFile = (fileName, otherDir,_ext) => {
+    o.readFile = (fileName, otherDir,_ext, _silent) => {
         if (!fileName) return null
         // must provide extention with prefix
         if(_ext && (_ext||"").indexOf('.')===-1 ) {
             return null
         }
+        
         let dr = otherDir ? otherDir :dir
         _ext = _ext || ext
         let fname = path.join(dr, `./${fileName}${_ext}`)
@@ -68,7 +71,7 @@ module.exports = function(/*{ dir, ext,path, silent },cb*/) {
             else d = str
             return d
         } catch (err) {
-            if(!silent) console.log(`[readFile][error]`,err.toString())
+            if(!(_silent || silent) ) console.log(`[readFile][error]`,err.toString())
         }
         return null
     }
@@ -80,9 +83,10 @@ module.exports = function(/*{ dir, ext,path, silent },cb*/) {
      * @param data:any, raw data not JSON/string
      * @param otherDir (optional) provide custom dir location, othere then our config.dir
      * @param _ext (optional) file extention name, example : .json
+     * @param silent:boolean disable any logging
      * @returns true/false
     */
-    o.writeFile = (fileName, data, otherDir, _ext) => {
+    o.writeFile = (fileName, data, otherDir, _ext,_silent) => {
         if (data === undefined) return false
         if (!fileName) return null
         let dr = otherDir ? otherDir : dir
@@ -94,7 +98,7 @@ module.exports = function(/*{ dir, ext,path, silent },cb*/) {
         try {
             if (!fs.existsSync(dirName)) fs.mkdirSync(dirName)
         } catch (err) {
-            if(!silent)  console.log(`[writeFile][error]`, err.toString())
+            if(!(_silent || silent) )  console.log(`[writeFile][error]`, err.toString())
             return false
         }
 
@@ -104,10 +108,10 @@ module.exports = function(/*{ dir, ext,path, silent },cb*/) {
                 fs.writeFileSync(fname, JSON.stringify(data))
             } else fs.writeFileSync(fname, data)
 
-            if(!silent) console.log(`[writeFile]`, `file:${fileName} written`)
+            if(!(_silent || silent) ) console.log(`[writeFile]`, `file:${fileName} written`)
             return true
         } catch (err) {
-            if(!silent) console.log(`[writeFile][error]`, err.toString())
+            if(!(_silent || silent) ) console.log(`[writeFile][error]`, err.toString())
             return false
         }
     }
@@ -120,9 +124,10 @@ module.exports = function(/*{ dir, ext,path, silent },cb*/) {
      * @param data:any, raw data not JSON/string
      * @param otherDir (optional) provide custom dir location, othere then our config.dir
      * @param _ext (optional) file extention name, example : .json
+     * @param silent:boolean disable any logging
      * @returns true/false
     */
-    o.appendFile = (fileName, data, otherDir, _ext) => {
+    o.appendFile = (fileName, data, otherDir, _ext,_silent) => {
         if (data === undefined) return false
         if (!fileName) return null
         let dr = otherDir ? otherDir : dir
@@ -134,22 +139,22 @@ module.exports = function(/*{ dir, ext,path, silent },cb*/) {
         try {
             if (!fs.existsSync(dirName)) fs.mkdirSync(dirName)
         } catch (err) {
-            if(!silent)  console.log(`[appendFile][error]`, err.toString())
+            if(!(_silent || silent) )  console.log(`[appendFile][error]`, err.toString())
             return false
         }
 
         try {
 
             if (_ext === '.json') {
-                if(!silent) console.log('cannot append to json file right!')
+                if(!(_silent || silent) ) console.log('cannot append to json file right!')
                 //fs.appendFileSync(fname, JSON.stringify(data))
                 return false
             } else fs.appendFileSync(fname, data)
 
-            if(!silent)  console.log(`[appendFile]`, `file:${fileName} written`)
+            if(!(_silent || silent) )  console.log(`[appendFile]`, `file:${fileName} written`)
             return true
         } catch (err) {
-            if(!silent) console.log(`[appendFile][error]`, err.toString())
+            if(!(_silent || silent) ) console.log(`[appendFile][error]`, err.toString())
             return false
         }
     }
@@ -162,9 +167,10 @@ module.exports = function(/*{ dir, ext,path, silent },cb*/) {
      * - only loads json files
      * @param filePreFix load files matching prefix
      * @param otherDir (optional) provide custom dir location, othere then our config.dir
+     * @param silent:boolean disable any logging 
      * @returns [...] array of files
     */
-    o.loadFileBatch = (filePreFix = '', otherDir='') => {
+    o.loadFileBatch = (filePreFix = '', otherDir='',_silent) => {
 
         try {
             let dr = otherDir ? otherDir : dir
@@ -185,13 +191,13 @@ module.exports = function(/*{ dir, ext,path, silent },cb*/) {
                     try {
                         return JSON.parse(fs.readFileSync(path.join(dr, file)))
                     } catch (err) {
-                        if(!silent) console.log('[loadFileBatch][error]', err.toString())
+                        if(!(_silent || silent) ) console.log('[loadFileBatch][error]', err.toString())
                     }
                 }).filter(n => !!n)
             return list
 
         } catch (err) {
-            if(!silent) console.log('[loadFileBatch][error]', err.toString())
+            if(!(_silent || silent) ) console.log('[loadFileBatch][error]', err.toString())
         }
         return []
     }
