@@ -43,6 +43,22 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
     if (ext.indexOf('.') !== 0) throw ('provided ext(extention) needs a prefix')
     ext = ext.toLowerCase()
 
+    // require loads faster
+    // can only support json, and js files
+    let loadRequire = (filePath)=>{
+        let arr =  filePath.split(/\./)
+      
+        try{
+            let checkPath = arr[arr.length-1] === 'json' || arr[arr.length-1] ==='js'
+            if(!checkPath) throw('wrong format provided')
+            return require(filePath)
+        }catch(err){
+            return undefined
+        }
+    }
+
+
+
     const o = {}
 
     /** 
@@ -60,15 +76,17 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
         if(_ext && (_ext||"").indexOf('.')===-1 ) {
             return null
         }
-        
+
+
         let dr = otherDir ? otherDir :dir
         _ext = _ext || ext
         let fname = path.join(dr, `./${fileName}${_ext}`)
+
         try {
-            let str = fs.readFileSync(fname).toString()
             let d
-            if (_ext === '.json') d = JSON.parse(str)
-            else d = str
+            if (_ext === '.json' || _ext === '.js') d= loadRequire(fname) // require is faster, lets use that insead!
+            else d = fs.readFileSync(fname).toString()
+
             return d
         } catch (err) {
             if(!(_silent || silent) ) console.log(`[readFile][error]`,err.toString())
@@ -106,7 +124,16 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
             
             if (_ext === '.json') {
                 fs.writeFileSync(fname, JSON.stringify(data))
-            } else fs.writeFileSync(fname, data)
+            } else {
+                let d
+                if (typeof data === "string") d = data
+                if (typeof data === "boolean") d = JSON.stringify(data)
+                if (typeof data === "number") d = JSON.stringify(data)
+                if (typeof data === "object") d = JSON.stringify(data)
+                if (typeof data === "function") d = JSON.stringify(data)
+
+                fs.writeFileSync(fname, d)
+            }
 
             if(!(_silent || silent) ) console.log(`[writeFile]`, `file:${fileName} written`)
             return true
@@ -188,8 +215,8 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
                 }
             }).filter(n => !!n)
                 .map(file => {
-                    try {
-                        return JSON.parse(fs.readFileSync(path.join(dr, file)))
+                    try {              
+                        return loadRequire(path.join(dr, file))
                     } catch (err) {
                         if(!(_silent || silent) ) console.log('[loadFileBatch][error]', err.toString())
                     }

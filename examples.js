@@ -4,13 +4,13 @@ const xfs = require('./index')
 function ExampleOne() {
    
     const { writeFile, readFile } = xfs(
-        () => ({ dir: __dirname, path: './logs/cache', ext: '.md' }),
+        () => ({ dir: __dirname, path: './logs', ext: '.json' }),
         // { ext: '.json', dir:... } // NOTE  would be overriten by cb
     )
     console.log(writeFile('exampleOne', { value: 100, message: 'hello world' })) // true if successful 
     console.log(readFile('exampleOne')) // { value: 100, message: 'hello world' }
 }
-//ExampleOne()
+ExampleOne()
 
 function ExampleTwo() {
 
@@ -29,4 +29,4 @@ function ExampleThree() {
     console.log(fullPath({'fileName':'./test'}))
 }
 
-ExampleThree()
+//ExampleThree()

@@ -60,3 +60,6 @@ function ExampleTwo() {
 
 // more examples at `./examples.js`
 ```
+
+#### Logs:
+- improved porformance, by changing fs.readFileSync to require() for only json and js files
