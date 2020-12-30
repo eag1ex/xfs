@@ -5,8 +5,9 @@
 * LICENCE: CC BY-NC-ND
 * SOURCE: _(https://creativecommons.org/licenses/by-nc-nd/4.0/)_
 
-- simple read/write fs convention
-- data is written in `.json` format and suffix, other formats such as [.md, text] are also supported
+### About
+* simple read/write file system (fs) conventions
+* data is written in `.json` format and suffix, other formats such as [.md, text] are also supported
 
 
 #### Installation
