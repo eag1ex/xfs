@@ -3,13 +3,13 @@
  * @xfs
  * - simple read/write file system app.
  * - more examples in `./examples.js` 
- * - default extention is set to `.json`, can use any other for example:[.txt,.md], but only data can be parsed with `.json` extention, other formats will return raw data.
+ * - default extension is set to `.json`, can use any other for example:[.txt,.md], but only data can be parsed with `.json` extension, other formats will return raw data.
 */
 module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
     const path = require('path')
     const fs = require('fs')
 
-    // NOTE dynamicly recognize arguments position    
+    // NOTE dynamically recognize arguments position    
     let { dir, ext, cb,pth,silent } = Object.entries(arguments).reduce((n, [key, val]) => {
 
         let keys = (typeof val === 'object' && val) ? Object.keys(val) : []   
@@ -40,7 +40,7 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
 
     if (!dir) throw ('{dir} is required')
     if (!ext) ext = `.json`
-    if (ext.indexOf('.') !== 0) throw ('provided ext(extention) needs a prefix')
+    if (ext.indexOf('.') !== 0) throw ('provided ext(extension) needs a prefix')
     ext = ext.toLowerCase()
 
     // require loads faster
@@ -64,15 +64,15 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
     /** 
      * @readFile
      * - read existing file from `dir`, must be set at `xfs({dir})`
-     * @param fileName ./fileName without extention, it is proposed as `.json`
-     * @param otherDir (optional) provide custom dir location, othere then our config.dir
-     * @param _ext provide/optional custom extention name, example `.md`
+     * @param fileName ./fileName without extension, it is proposed as `.json`
+     * @param otherDir (optional) provide custom dir location, other then our config.dir
+     * @param _ext provide/optional custom extension name, example `.md`
      * @param silent:boolean disable any logging
      * @returns returns any parsed data
     */
     o.readFile = (fileName, otherDir,_ext, _silent) => {
         if (!fileName) return null
-        // must provide extention with prefix
+        // must provide extension with prefix
         if(_ext && (_ext||"").indexOf('.')===-1 ) {
             return null
         }
@@ -84,7 +84,7 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
 
         try {
             let d
-            if (_ext === '.json' || _ext === '.js') d= loadRequire(fname) // require is faster, lets use that insead!
+            if (_ext === '.json' || _ext === '.js') d= loadRequire(fname) // require is faster, lets use that instead!
             else d = fs.readFileSync(fname).toString()
 
             return d
@@ -97,10 +97,10 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
     /** 
      * @fileName
      * - only provide `fileName`, `dir ` must be set at `xfs({dir})`
-     * @param fileName ./fileName without extention, it is proposed as `.json`
+     * @param fileName ./fileName without extension, it is proposed as `.json`
      * @param data:any, raw data not JSON/string
-     * @param otherDir (optional) provide custom dir location, othere then our config.dir
-     * @param _ext (optional) file extention name, example : .json
+     * @param otherDir (optional) provide custom dir location, other then our config.dir
+     * @param _ext (optional) file extension name, example : .json
      * @param silent:boolean disable any logging
      * @returns true/false
     */
@@ -147,10 +147,10 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
       /** 
      * @appendFile
      * - only provide `fileName`, `dir ` must be set at `xfs({dir})`
-     * @param fileName ./fileName without extention, default is `.json` but wont work with appendFile in this case! 
+     * @param fileName ./fileName without extension, default is `.json` but wont work with appendFile in this case! 
      * @param data:any, raw data not JSON/string
-     * @param otherDir (optional) provide custom dir location, othere then our config.dir
-     * @param _ext (optional) file extention name, example : .json
+     * @param otherDir (optional) provide custom dir location, other then our config.dir
+     * @param _ext (optional) file extension name, example : .json
      * @param silent:boolean disable any logging
      * @returns true/false
     */
@@ -193,7 +193,7 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
      * - if file exists and doest have data, will also count, and be included in output
      * - only loads json files
      * @param filePreFix load files matching prefix
-     * @param otherDir (optional) provide custom dir location, othere then our config.dir
+     * @param otherDir (optional) provide custom dir location, other then our config.dir
      * @param silent:boolean disable any logging 
      * @returns [...] array of files
     */

@@ -1,9 +1,9 @@
 ### xfs
 - simple read/write fs convention
-- data is written in `.json` format and sufix, other formats such as [.md, text] are also supported
+- data is written in `.json` format and suffix, other formats such as [.md, text] are also supported
 
 
-#### Instalation
+#### Installation
 - currently dont have this on npm, best way to use it as an npm module is to install it this way:
 
 ```
@@ -15,17 +15,17 @@
     * `cb()=>({dir,path,ext}) ):Object` we can use callback, instead of providing `{dir,ext,(optional {path} )}`, this way we do not have to use `require('path')` to join then, or use of config.dir with full path, __thanks arrow/fn callback__ `{dir:_dirname}` > it gives us location relative to app. `xfs(cb,x)` or `xfs(x,cb)` args position dont matter, so no worry about placement. If you also declare {dir,ext}, callback takes priority, so those will be overriten.
         - `cb()=>({dir})`: include `__dirname`
         - `cb()=>({path})`: include the path name, examples: `./a`, `./a/b`, then both are joined by dir, when path isnt provided anywhere, `__dirname` location becomes your path.
-        - `cb()=>({ext})`: file extention type.
+        - `cb()=>({ext})`: file extension type.
 
     * `dir:string` can supply absolute path, relative to application root. __use only without cb__
-    *  `ext:String` can provide file extentions: `.json, .txt, .md` in `config.ext`, but will only parse data in `.json` extention, __use only without cb__
+    *  `ext:String` can provide file extensions: `.json, .txt, .md` in `config.ext`, but will only parse data in `.json` extension, __use only without cb__
     * `silent:boolean` disable all logging, including errors
 
 
 #### Methods
-- `readFile(fileName,otherDir,_ext, silent):data`: returns any parsed data (`only for .json extention`)
-- `writeFile(fileName,data,otherDir, _ext,silent):boolean`: returns true/false , will automaticly create base ./dir if doesnt exist
-- `appendFile(fileName,data,otherDir, _ext,silent):boolean`: returns true/false , will automaticly create base ./dir if doesnt exist, appends data if file already exists, can only accept text data, excluding json
+- `readFile(fileName,otherDir,_ext, silent):data`: returns any parsed data (`only for .json extension`)
+- `writeFile(fileName,data,otherDir, _ext,silent):boolean`: returns true/false , will automatically create base ./dir if doesnt exist
+- `appendFile(fileName,data,otherDir, _ext,silent):boolean`: returns true/false , will automatically create base ./dir if doesnt exist, appends data if file already exists, can only accept text data, excluding json
 - `fullPath({ dirLocation, fileName },silent):string`: returns fullPath 
 - `loadFileBatch(filePrefix,otherDir):[..]` : loads any .json files from our config dir. Returns parsed data of all available json files.
     * `filePrefix` : match all files with given prefix in the dir
@@ -62,4 +62,4 @@ function ExampleTwo() {
 ```
 
 #### Logs:
-- improved porformance, by changing fs.readFileSync to require() for only json and js files
+- improved performance, by changing fs.readFileSync to require() for only json and js files
