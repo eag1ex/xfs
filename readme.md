@@ -1,4 +1,10 @@
 ### xfs
+####  [ Developed by Eaglex ](http://eaglex.net)
+
+##### LICENSE
+* LICENCE: CC BY-NC-ND
+* SOURCE: _(https://creativecommons.org/licenses/by-nc-nd/4.0/)_
+
 - simple read/write fs convention
 - data is written in `.json` format and suffix, other formats such as [.md, text] are also supported
 
@@ -63,3 +69,10 @@ function ExampleTwo() {
 
 #### Logs:
 - improved performance, by changing fs.readFileSync to require() for only json and js files
+
+#### Contact
+
+Have questions, or would like to submit feedback, **contact me at:** (https://eaglex.net/app/contact?product=x-fs)
+
+
+#### Thank you
