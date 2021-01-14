@@ -10,13 +10,13 @@ function ExampleOne() {
     console.log(writeFile('exampleOne', { value: 100, message: 'hello world' })) // true if successful 
     console.log(readFile('exampleOne')) // { value: 100, message: 'hello world' }
 }
-ExampleOne()
+//ExampleOne()
 
 function ExampleTwo() {
 
     const path = require('path')
-    const { writeFile, readFile } = xfs({ ext: '.md', dir: path.join(__dirname, './logs/cache') })
-    console.log(writeFile('exampleOne', { value: 100, message: 'hello world' })) // true if successful 
+    const { writeFile, readFile } = xfs({ ext: '.json', dir: __dirname, path: './logs/cache', pretty:true })
+    console.log(writeFile('exampleOne', {data:{ value: 100, message: 'hello world', array:[1,2,3,4]  }})) // true if successful 
     console.log(readFile('exampleOne')) // { value: 100, message: 'hello world' }
 }
 //ExampleTwo()

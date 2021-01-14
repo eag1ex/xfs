@@ -4,13 +4,15 @@
  * - simple read/write file system app.
  * - more examples in `./examples.js` 
  * - default extension is set to `.json`, can use any other for example:[.txt,.md], but only data can be parsed with `.json` extension, other formats will return raw data.
+ * @param cb(({dir, ext,path, silent, pretty})=>) use callback to provide return args
+ * @param {object} `{dir, ext,path,silent,pretty}` or use object (selection between cb and obj is dynamic)
 */
-module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
-    const path = require('path')
+const xfs = function() {
+    const _path = require('path')
     const fs = require('fs')
 
     // NOTE dynamically recognize arguments position    
-    let { dir, ext, cb,pth,silent } = Object.entries(arguments).reduce((n, [key, val]) => {
+    let { dir, ext, cb,path,silent,pretty } = Object.entries(arguments).reduce((n, [key, val]) => {
 
         let keys = (typeof val === 'object' && val) ? Object.keys(val) : []   
         let fn = typeof val === 'function' ? val : null
@@ -20,6 +22,7 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
             if (keys.indexOf('ext') !== -1) n['ext'] = val['ext']
             if (keys.indexOf('path') !== -1) n['path'] = val['path']
             if (keys.indexOf('silent') !== -1) n['silent'] = val['silent']
+            if (keys.indexOf('pretty') !== -1) n['pretty'] = val['pretty']
         }
 
         if (fn) n['cb'] = fn
@@ -30,13 +33,13 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
     if (cb) {
         const _opts = cb() || {}
         if (_opts.dir) dir = _opts.dir // NOTE call back was provided where the xfs was called with its relative dir, so we can use that instead of config.dir
-        if (_opts.path && dir) dir = path.join(dir, _opts.path || pth)
+        if (_opts.path && dir) dir = _path.join(dir, _opts.path || path)
         if (_opts.ext) ext = _opts.ext
-        if (_opts.silent) silent = _opts.silent
+        if (_opts.pretty) pretty = _opts.pretty
     }
 
     // NOTE if path was provided in arguments: {path} and no cb was set, use that instead!
-    if(!cb && pth && dir) dir = path.join(dir, pth)
+    if(!cb && path && dir) dir = _path.join(dir, path)
 
     if (!dir) throw ('{dir} is required')
     if (!ext) ext = `.json`
@@ -80,7 +83,7 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
 
         let dr = otherDir ? otherDir :dir
         _ext = _ext || ext
-        let fname = path.join(dr, `./${fileName}${_ext}`)
+        let fname = _path.join(dr, `./${fileName}${_ext}`)
 
         try {
             let d
@@ -109,10 +112,10 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
         if (!fileName) return null
         let dr = otherDir ? otherDir : dir
         _ext = _ext || ext
-        let fname = path.join(dr, `./${fileName}${_ext}`)
+        let fname = _path.join(dr, `./${fileName}${_ext}`)
 
         /// make dir if doesnt exist
-        let dirName = path.join(dr, './')
+        let dirName = _path.join(dr, './')
         try {
             if (!fs.existsSync(dirName)) fs.mkdirSync(dirName)
         } catch (err) {
@@ -123,7 +126,12 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
         try {
             
             if (_ext === '.json') {
-                fs.writeFileSync(fname, JSON.stringify(data))
+                let jData
+                // prettyfie data option only available in json 
+                if(pretty) jData = JSON.stringify(data,null,2)
+                else jData = JSON.stringify(data)
+
+                fs.writeFileSync(fname, jData)
             } else {
                 let d
                 if (typeof data === "string") d = data
@@ -159,10 +167,10 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
         if (!fileName) return null
         let dr = otherDir ? otherDir : dir
         _ext = _ext || ext
-        let fname = path.join(dr, `./${fileName}${_ext}`)
+        let fname = _path.join(dr, `./${fileName}${_ext}`)
 
         /// make dir if doesnt exist
-        let dirName = path.join(dr, './')
+        let dirName = _path.join(dr, './')
         try {
             if (!fs.existsSync(dirName)) fs.mkdirSync(dirName)
         } catch (err) {
@@ -216,7 +224,7 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
             }).filter(n => !!n)
                 .map(file => {
                     try {              
-                        return loadRequire(path.join(dr, file))
+                        return loadRequire(_path.join(dr, file))
                     } catch (err) {
                         if(!(_silent || silent) ) console.log('[loadFileBatch][error]', err.toString())
                     }
@@ -233,14 +241,16 @@ module.exports = function(/*{ dir, ext,path, silent, moment },cb*/) {
 
     /** 
      * @fullPath
-     * - returns fill path to any file
+     * - returns fill _path to any file
      * @param `{dirLoc,pathLoc}`, provide new dirLoc, and path and return full pathLoc. dirLocation/pathLoc revert to original xfs config when not set 
     */
     o.fullPath = ({ dirLoc, pathLoc }) => {
         
-        let buildPath = path.join(`${dirLoc || dir}`, pathLoc || pth || './')
+        let buildPath = _path.join(`${dirLoc || dir}`, pathLoc || path || './')
         return buildPath
     }
 
     return o
 }
+
+module.exports = xfs

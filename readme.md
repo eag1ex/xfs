@@ -23,7 +23,7 @@
         - `cb()=>({dir})`: include `__dirname`
         - `cb()=>({path})`: include the path name, examples: `./a`, `./a/b`, then both are joined by dir, when path isnt provided anywhere, `__dirname` location becomes your path.
         - `cb()=>({ext})`: file extension type.
-
+    * `pretty:boolean`: Beautify json output, only works with ext:`.json` option
     * `dir:string` can supply absolute path, relative to application root. __use only without cb__
     *  `ext:String` can provide file extensions: `.json, .txt, .md` in `config.ext`, but will only parse data in `.json` extension, __use only without cb__
     * `silent:boolean` disable all logging, including errors
