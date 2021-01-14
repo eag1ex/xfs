@@ -30,6 +30,7 @@
 
 
 #### Methods
+- `dirList(otherDir, _ext, _silent)` : returns array with list files in given dir, based on file type specified, only files are listed, dir>dir are ignored
 - `readFile(fileName,otherDir,_ext, silent):data`: returns any parsed data (`only for .json extension`)
 - `writeFile(fileName,data,otherDir, _ext,silent):boolean`: returns true/false , will automatically create base ./dir if doesnt exist
 - `appendFile(fileName,data,otherDir, _ext,silent):boolean`: returns true/false , will automatically create base ./dir if doesnt exist, appends data if file already exists, can only accept text data, excluding json

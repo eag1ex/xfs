@@ -250,6 +250,32 @@ const xfs = function() {
         return buildPath
     }
 
+    /** 
+     * @dirList
+     * - list all, and only files in provided dir of given type
+     * @param otherDir if not using declared dir, provide alternative
+     * @param _ext provide/optional custom extension name, example `.md` `.json` 
+     * @param silent:boolean disable any logging
+     * @returns {array} [] list of full file paths
+    */
+    o.dirList = (otherDir, _ext, _silent=false) => {
+
+        let dr = otherDir ? otherDir : dir
+        _ext = _ext || ext
+        _silent = _silent || silent
+        try {
+            let list = fs.readdirSync(dr).map(file => {
+                if(!file) return 
+                let fullPath = _path.join(dr, file)
+                if (fs.lstatSync(fullPath).isDirectory()) return null
+                if (file.indexOf(_ext) !== -1) return fullPath
+            }).filter(n => !!n)
+            return list
+        } catch (err) {
+            if (!_silent) console.error('[dirList][error]', err)
+        }
+        return []
+    }
     return o
 }
 
