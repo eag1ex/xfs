@@ -64,6 +64,56 @@ const xfs = function() {
 
     const o = {}
 
+
+    /** 
+     * @removeFile
+     * - remove existing file from `dir`
+     * @param fileName ./fileName without extension, it is proposed as `.json`
+     * @param otherDir (optional) provide custom dir location, other then our config.dir
+     * @param _ext provide/optional custom extension name, example `.md`
+     * @param silent:boolean disable any logging
+     * @returns boolean
+    */
+    o.removeFile = (fileName, otherDir, _ext, _silent) => {
+        if (!fileName) return false
+        // must provide extension with prefix
+        if (_ext && (_ext || "").indexOf('.') === -1) {
+            return null
+        }
+
+        let dr = otherDir ? otherDir : dir
+        _ext = _ext || ext
+        let fname = _path.join(dr, `./${fileName}${_ext}`)
+
+        
+        try {
+
+            if (!fs.existsSync(fname)) {
+                if (!(_silent || silent)) console.log(`[readFile]`, 'file doesnt exist')
+                return false
+            }
+
+            if (fs.lstatSync(fname).isDirectory()) {
+                // file cannot be a directory
+                if (!(_silent || silent)) console.log(`[readFile]`, 'cannot remove a directory')
+                return false
+            }
+        } catch (err) {
+
+        }
+
+        try {
+            fs.unlinkSync(fname)
+            if(!(_silent || silent) ) console.log(`[removeFile]`, `file:${fname} removed`)
+            return true
+        } catch (err) {
+
+            if (!(_silent || silent)) console.log(`[removeFile][error]`, err.toString())
+            return false
+        }
+
+    }
+
     /** 
      * @readFile
      * - read existing file from `dir`, must be set at `xfs({dir})`
@@ -80,11 +130,21 @@ const xfs = function() {
             return null
         }
 
-
         let dr = otherDir ? otherDir :dir
         _ext = _ext || ext
         let fname = _path.join(dr, `./${fileName}${_ext}`)
 
+        try {
+            if (fs.lstatSync(fname).isDirectory()) {
+                // file cannot be a directory
+                if (!(_silent || silent)) console.log(`[readFile][error]`, 'cannot remove a directory')
+                return null
+            }
+
+        } catch (err) {
+            return null
+        }
+      
         try {
             let d
             if (_ext === '.json' || _ext === '.js') d= loadRequire(fname) // require is faster, lets use that instead!

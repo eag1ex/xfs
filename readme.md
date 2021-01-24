@@ -30,6 +30,7 @@
 
 
 #### Methods
+- `removeFile(fileName, otherDir, _ext, _silen)` : remove file from dir
 - `dirList(otherDir, _ext, _silent)` : returns array with list files in given dir, based on file type specified, only files are listed, dir>dir are ignored
 - `readFile(fileName,otherDir,_ext, silent):data`: returns any parsed data (`only for .json extension`)
 - `writeFile(fileName,data,otherDir, _ext,silent):boolean`: returns true/false , will automatically create base ./dir if doesnt exist
@@ -46,13 +47,13 @@
 function ExampleOne() {
 
     const xfs = require('xfs')
-    const { writeFile, readFile } = xfs(
+    const { writeFile, readFile,removeFile } = xfs(
         () => ({ dir: __dirname, path: './logs/cache', ext: '.md' }),
         // { ext: '.json', dir:... } // NOTE  would be overriten by cb
     )
     console.log(writeFile('exampleOne', { value: 100, message: 'hello world' })) // true if successful 
     console.log(readFile('exampleOne')) // { value: 100, message: 'hello world' }
-
+    
 }
 
 

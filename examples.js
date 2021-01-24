@@ -15,11 +15,13 @@ function ExampleOne() {
 function ExampleTwo() {
 
     const path = require('path')
-    const { writeFile, readFile } = xfs({ ext: '.json', dir: __dirname, path: './logs/cache', pretty:true })
-    console.log(writeFile('exampleOne', {data:{ value: 100, message: 'hello world', array:[1,2,3,4]  }})) // true if successful 
-    console.log(readFile('exampleOne')) // { value: 100, message: 'hello world' }
+    const { writeFile, readFile,removeFile } = xfs({ ext: '.json', dir: __dirname, path: './logs/cache', pretty:true })
+   console.log(writeFile('exampleOne', {data:{ value: 100, message: 'hello world', array:[1,2,3,4]  }})) // true if successful 
+   // console.log(readFile('exampleOne')) // { value: 100, message: 'hello world' }
+
+    console.log('removeFile',removeFile('exampleOne'))
 }
-//ExampleTwo()
+ExampleTwo()
 
 
 function ExampleThree() {
@@ -34,7 +36,7 @@ function ExampleFour() {
 
     const {dirList } = xfs( () => ({ dir: __dirname, path: './logs/cache' }) );
     console.log(dirList())
-}; ExampleFour()
+}; //ExampleFour()
 
 
 
