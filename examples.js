@@ -19,7 +19,7 @@ function ExampleTwo() {
    console.log(writeFile('exampleOne', {data:{ value: 100, message: 'hello world', array:[1,2,3,4]  }})) // true if successful 
    // console.log(readFile('exampleOne')) // { value: 100, message: 'hello world' }
 
-    console.log('removeFile',removeFile('exampleOne'))
+    //console.log('removeFile',removeFile('exampleOne'))
 }
 ExampleTwo()
 

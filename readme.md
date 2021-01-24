@@ -54,6 +54,8 @@ function ExampleOne() {
     console.log(writeFile('exampleOne', { value: 100, message: 'hello world' })) // true if successful 
     console.log(readFile('exampleOne')) // { value: 100, message: 'hello world' }
     
+
+    // removeFile('exampleOne') // true , would remove above file
 }
 
 
