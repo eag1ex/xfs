@@ -30,6 +30,7 @@
 
 
 #### Methods
+- `checkFilePermissions(fileName, otherDir, _ext, _silent)` : check file permissions, returns `{file, perms}`
 - `removeFile(fileName, otherDir, _ext, _silen)` : remove file from dir
 - `dirList(otherDir, _ext, _silent)` : returns array with list files in given dir, based on file type specified, only files are listed, dir>dir are ignored
 - `readFile(fileName,otherDir,_ext, silent):data`: returns any parsed data (`only for .json extension`)

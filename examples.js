@@ -3,25 +3,26 @@ const xfs = require('./index')
 
 function ExampleOne() {
    
-    const { writeFile, readFile } = xfs(
-        () => ({ dir: __dirname, path: './logs', ext: '.json' }),
+    const { writeFile, readFile,checkFilePermissions } = xfs(
+        () => ({ dir: __dirname, path: './logs', ext: '.json'}),
         // { ext: '.json', dir:... } // NOTE  would be overriten by cb
     )
-    console.log(writeFile('exampleOne', { value: 100, message: 'hello world' })) // true if successful 
-    console.log(readFile('exampleOne')) // { value: 100, message: 'hello world' }
+   // console.log(writeFile('exampleOne', { value: 100, message: 'hello world23' })) // true if successful 
+    //console.log(readFile('exampleOne')) // { value: 100, message: 'hello world' }
+    console.log(JSON.stringify(checkFilePermissions('exampleOne'),null,2))
 }
-//ExampleOne()
+ExampleOne()
 
 function ExampleTwo() {
 
     const path = require('path')
     const { writeFile, readFile,removeFile } = xfs({ ext: '.json', dir: __dirname, path: './logs/cache', pretty:true })
-   console.log(writeFile('exampleOne', {data:{ value: 100, message: 'hello world', array:[1,2,3,4]  }})) // true if successful 
+   //console.log(writeFile('exampleOne', {data:{ value: 100, message: 'hello world', array:[1,2,3,4]  }})) // true if successful 
    // console.log(readFile('exampleOne')) // { value: 100, message: 'hello world' }
 
     //console.log('removeFile',removeFile('exampleOne'))
 }
-ExampleTwo()
+//ExampleTwo()
 
 
 function ExampleThree() {

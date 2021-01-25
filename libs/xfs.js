@@ -36,6 +36,7 @@ const xfs = function() {
         if (_opts.path && dir) dir = _path.join(dir, _opts.path || path)
         if (_opts.ext) ext = _opts.ext
         if (_opts.pretty) pretty = _opts.pretty
+        if (_opts.silent) silent =_opts.silent
     }
 
     // NOTE if path was provided in arguments: {path} and no cb was set, use that instead!
@@ -64,6 +65,106 @@ const xfs = function() {
 
     const o = {}
 
+        /** 
+     * @readFile
+     * - check all available permissions of a file
+     * @param fileName ./fileName without extension, it is proposed as `.json`
+     * @param otherDir (optional) provide custom dir location, other then our config.dir
+     * @param _ext provide/optional custom extension name, example `.md`
+     * @param silent:boolean disable any logging
+     * @returns {perms,file}
+    */  
+    const checkFilePermissions = (fileName, otherDir, _ext, _silent) => {
+
+        if (!fileName) return null
+        // must provide extension with prefix
+        if (_ext && (_ext || "").indexOf('.') === -1) {
+            return null
+        }
+
+        let dr = otherDir ? otherDir : dir
+        _ext = _ext || ext
+        let fname = _path.join(dr, `./${fileName}${_ext}`)
+
+        /** 
+         * check all permissions aof a file
+        */
+        let checkPerms = (fname) => {
+            let perms = [/*'rwx',*/ 'r', 'w', 'x']
+
+            let forSwitch = (perm) => {
+                let output
+
+                switch (perm) {
+
+                    // case "rwx":
+                    //     try {
+
+                    //         fs.accessSync(fname, fs.constants.F_OK) 
+                    //         output = 'rwx'
+                    //     }
+                    //     catch (err) {
+                    //          // console.log("%s doesn't exist", path);
+                    //     }
+
+                    //     break
+                    case "r":
+
+                        try {
+                            fs.accessSync(fname, fs.constants.R_OK)
+                            output = 'r'
+                        }
+                        catch (err) {
+                            // console.log("%s doesn't exist", path);
+
+                        }
+
+
+                        break
+                    case "x":
+
+                        try {
+
+                            fs.accessSync(fname, fs.constants.X_OK | fs.constants.F_OK)
+                            output = 'x'
+                        }
+                        catch (err) {
+                            //console.log("%s doesn't exist", path);
+                        }
+
+                        break
+
+                    case "w":
+
+                        try {
+                            fs.accessSync(fname, fs.constants.W_OK)
+                            output = 'w'
+                        }
+                        catch (err) {
+                            // console.log("%s doesn't exist", path);
+                        }
+                        break
+
+                    default:
+                        console.error('no perm match ?', perm)
+                }
+                return output
+            }
+
+            let permissions = []
+            for (let inx = 0; inx < perms.length; inx++) {
+                permissions.push(forSwitch(perms[inx]))
+            }
+
+            let res = permissions.filter(n => !!n).toString().replace(/,/g, '')
+            return res 
+        }
+
+        return {
+            file: fname,
+            perms: checkPerms(fname)
+        }
+    }
 
     /** 
      * @removeFile
@@ -180,6 +281,14 @@ const xfs = function() {
             if (!fs.existsSync(dirName)) fs.mkdirSync(dirName)
         } catch (err) {
             if(!(_silent || silent) )  console.log(`[writeFile][error]`, err.toString())
+            return false
+        }
+
+        let {perms} = checkFilePermissions(fileName, null, null, _silent) 
+
+        if(perms.indexOf('w')===-1){
+            console.log('silent',silent)
+            if(!(_silent || silent) ) console.log(`[writeFile][error]`, 'no write permission to: ',fname)
             return false
         }
 
@@ -336,6 +445,9 @@ const xfs = function() {
         }
         return []
     }
+
+    o.checkFilePermissions = checkFilePermissions
+
     return o
 }
 
