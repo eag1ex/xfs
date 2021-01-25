@@ -284,11 +284,13 @@ const xfs = function() {
             return false
         }
 
-        let {perms} = checkFilePermissions(fileName, null, null, _silent) 
-
-        if(perms.indexOf('w')===-1){
-            if(!(_silent || silent) ) console.log(`[writeFile][error]`, 'no write permission to: ',fname)
-            return false
+        // well only test if it exists!
+        if (fs.existsSync(fileName)) {
+            let { perms } = checkFilePermissions(fileName, null, null, _silent)
+            if (perms.indexOf('w') === -1) {
+                if (!(_silent || silent)) console.log(`[writeFile][error]`, 'no write permission to: ', fname)
+                return false
+            }
         }
 
         try {
@@ -347,11 +349,14 @@ const xfs = function() {
         }
 
 
-        let {perms} = checkFilePermissions(fileName, null, null, _silent) 
+        // well only test if it exists!
+        if (fs.existsSync(fileName)) {
+            let { perms } = checkFilePermissions(fileName, null, null, _silent)
 
-        if(perms.indexOf('w')===-1){
-            if(!(_silent || silent) ) console.log(`[appendFile][error]`, 'no write permission to: ',fname)
-            return false
+            if (perms.indexOf('w') === -1) {
+                if (!(_silent || silent)) console.log(`[appendFile][error]`, 'no write permission to: ', fname)
+                return false
+            }
         }
 
 
