@@ -382,14 +382,15 @@ const xfs = function() {
      * - load files from a batch in directory with given prefix
      * - if file exists and doest have data, will also count, and be included in output
      * - only loads json files
-     * @param filePreFix load files matching prefix
+     * @param filePattern load files matching pattern
      * @param otherDir (optional) provide custom dir location, other then our config.dir
      * @param silent:boolean disable any logging 
      * @returns [...] array of files
     */
-    o.loadFileBatch = (filePreFix = '', otherDir='',_silent) => {
+    o.loadFileBatch = (filePattern = '', otherDir='',_silent) => {
 
-        try {
+        if(!filePattern) return []
+        try {   
             let dr = otherDir ? otherDir : dir
             
             // must provide dir not a full file path
@@ -397,10 +398,10 @@ const xfs = function() {
                 return []
             }
             let list = fs.readdirSync(dr).map(file => {
-                if(!filePreFix && (file.indexOf('.json')!==-1 || file.indexOf('.JSON')!==-1) ){
+                if(!filePattern && (file.indexOf('.json')!==-1 || file.indexOf('.JSON')!==-1) ){
                     return file
                 }
-                if (file.indexOf(filePreFix) === 0 && (file.indexOf('.json')!==-1 || file.indexOf('.JSON')!==-1) ) {
+                if (file.indexOf(filePattern) !==-1 && (file.indexOf('.json')!==-1 || file.indexOf('.JSON')!==-1) ) {
                     return file
                 }
             }).filter(n => !!n)
