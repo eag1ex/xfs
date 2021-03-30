@@ -40,6 +40,7 @@
 - `loadFileBatch(filePrefix,otherDir):[..]` : loads any .json files from our config dir. Returns parsed data of all available json files.
     * `filePrefix` : match all files with given prefix in the dir
     * `otherDir` : provide optional dir other then our/current 
+- `removeDir(dirName, otherFullPath, _silent)` : remove dir by name    
 
 
 #### Examples:

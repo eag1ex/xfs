@@ -1,11 +1,14 @@
 {
   "name": "x-fs",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "simple read/write fs convention",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "rimraf": "^3.0.2"
+  }
 }

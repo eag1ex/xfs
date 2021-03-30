@@ -10,7 +10,7 @@
 const xfs = function() {
     const _path = require('path')
     const fs = require('fs')
-
+    const rimraf = require("rimraf");
     // NOTE dynamically recognize arguments position    
     let { dir, ext, cb,path,silent,pretty } = Object.entries(arguments).reduce((n, [key, val]) => {
 
@@ -165,6 +165,38 @@ const xfs = function() {
             perms: checkPerms(fname)
         }
     }
+
+    
+    o.removeDir = (dirName, otherFullPath, _silent) => {
+        dirName = (dirName ||'').trim()
+        let fPath = otherFullPath ? otherFullPath : dir
+
+        if(!dirName || (dirName ||'').length<2 ) {
+            console.log('[removeDir]','invalid dirName provided, and must be length>1')
+            return false
+        }
+
+        let dName = _path.join(fPath, dirName)
+
+        if (fs.existsSync(dName)) {
+            try{             
+                rimraf.sync(dName,{ nosort: true, silent:  (_silent || silent) ===true });
+                if (!(_silent || silent)) console.log(`[removeDir]`, `dir:${dirName} removed`)
+                return true
+            }catch(err){
+                if (!(_silent || silent)) {
+                    console.log(`[removeDir]`, `dir:${dirName} not removed`)
+                    console.log(err.toString())
+                }
+            }           
+           
+            return false
+        }
+
+        else if (!(_silent || silent)) console.log(`[removeDir]`, `dir:${dirName} doesnt exist`)
+        return false
+    }
+
 
     /** 
      * @removeFile

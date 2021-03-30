@@ -3,15 +3,16 @@ const xfs = require('./index')
 
 function ExampleOne() {
    
-    const { writeFile, readFile,checkFilePermissions } = xfs(
+    const { writeFile, readFile,checkFilePermissions, removeDir } = xfs(
         () => ({ dir: __dirname, path: './logs', ext: '.json'}),
         // { ext: '.json', dir:... } // NOTE  would be overriten by cb
     )
+    // removeDir('abcdir')
    // console.log(writeFile('exampleOne', { value: 100, message: 'hello world23' })) // true if successful 
     //console.log(readFile('exampleOne')) // { value: 100, message: 'hello world' }
-    console.log(JSON.stringify(checkFilePermissions('exampleOne'),null,2))
+    //console.log(JSON.stringify(checkFilePermissions('exampleOne'),null,2))
 }
-ExampleOne()
+ ExampleOne()
 
 function ExampleTwo() {
 
