@@ -465,6 +465,30 @@ const xfs = function() {
         return buildPath
     }
 
+        /** 
+     * @listFolders
+     * - list all folders in the given directory
+     * @param otherDir to provide alternative dir root
+     * @param silent:boolean disable any logging
+     * @returns {array} [] list of full file paths
+    */
+    o.listFolders = (otherDir, _silent = false) => {
+
+        let dr = otherDir ? otherDir : dir
+        _silent = _silent || silent
+        try {
+            let list = fs.readdirSync(dr).map(file => {
+                if (!file) return
+                if (fs.lstatSync(fullPath).isDirectory()) return fullPath         
+            }).filter(n => !!n)
+            return list
+        } catch (err) {
+            if (!_silent) console.error('[listFolders][error]', err)
+        }
+        return []
+    }
+
+
     /** 
      * @dirList
      * - list all, and only files in provided dir of given type

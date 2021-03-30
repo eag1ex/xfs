@@ -41,7 +41,7 @@
     * `filePrefix` : match all files with given prefix in the dir
     * `otherDir` : provide optional dir other then our/current 
 - `removeDir(dirName, otherFullPath, _silent)` : remove dir by name    
-
+- `listFolders(otherDir, _silent)`: list all folders in the given directory, returns array with full paths
 
 #### Examples:
 ```js
