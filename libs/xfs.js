@@ -477,8 +477,9 @@ const xfs = function() {
         let dr = otherDir ? otherDir : dir
         _silent = _silent || silent
         try {
-            let list = fs.readdirSync(dr).map(file => {
-                if (!file) return
+            let list = fs.readdirSync(dr).map(di => {
+                if (!di) return
+                let fullPath = _path.join(dr, di)
                 if (fs.lstatSync(fullPath).isDirectory()) return fullPath         
             }).filter(n => !!n)
             return list
