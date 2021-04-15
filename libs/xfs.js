@@ -42,7 +42,7 @@ const xfs = function() {
     // NOTE if path was provided in arguments: {path} and no cb was set, use that instead!
     if(!cb && path && dir) dir = _path.join(dir, path)
 
-    if (!dir) throw ('{dir} is required')
+    if (!dir) throw ('[xfs] {dir} is required')
     if (!ext) ext = `.json`
     if (ext.indexOf('.') !== 0) throw ('provided ext(extension) needs a prefix')
     ext = ext.toLowerCase()
@@ -165,6 +165,7 @@ const xfs = function() {
             perms: checkPerms(fname)
         }
     }
+
 
     
     o.removeDir = (dirName, otherFullPath, _silent) => {
